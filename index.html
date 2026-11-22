@@ -1,0 +1,914 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SMART English · Catalog Entry Maker v1.3</title>
+<style>
+  :root {
+    --bg: #070d19;
+    --bg-glow: rgba(56, 189, 248, 0.08);
+    --surface: #0f172a;
+    --surface-2: #1e293b;
+    --input-bg: #0b1220;
+    --text: #f8fafc;
+    --muted: #94a3b8;
+    --accent: #38bdf8;
+    --accent-hover: #7dd3fc;
+    --accent-2: #818cf8;
+    --success: #34d399;
+    --danger: #fb7185;
+    --danger-bg: rgba(251, 113, 133, 0.1);
+    --border: rgba(148, 163, 184, 0.18);
+    --border-focus: #38bdf8;
+    --radius-lg: 16px;
+    --radius-md: 10px;
+    --shadow: 0 20px 45px -15px rgba(0, 0, 0, 0.65);
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    background:
+      radial-gradient(circle at 15% 0%, var(--bg-glow), transparent 45%),
+      radial-gradient(circle at 85% 10%, rgba(129, 140, 248, 0.08), transparent 45%),
+      var(--bg);
+    color: var(--text);
+    line-height: 1.5;
+    padding: 2rem 1.25rem 4rem;
+    min-height: 100vh;
+  }
+
+  .container { max-width: 960px; margin: 0 auto; }
+
+  /* Header */
+  header {
+    text-align: center;
+    margin-bottom: 2rem;
+  }
+
+  .brand-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    padding: 0.3rem 0.85rem;
+    border-radius: 999px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--accent);
+    background: rgba(56, 189, 248, 0.1);
+    border: 1px solid rgba(56, 189, 248, 0.25);
+    margin-bottom: 0.75rem;
+  }
+
+  h1 {
+    font-size: 2.1rem;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    margin: 0 0 0.4rem;
+    background: linear-gradient(135deg, #f8fafc 20%, var(--accent) 70%, var(--accent-2));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .subtitle {
+    color: var(--muted);
+    font-size: 0.98rem;
+    margin: 0;
+  }
+
+  .subtitle code {
+    color: var(--accent);
+    background: rgba(56, 189, 248, 0.1);
+    padding: 0.15rem 0.4rem;
+    border-radius: 5px;
+    font-size: 0.88em;
+  }
+
+  /* Main Card */
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 1.75rem;
+    margin-bottom: 1.75rem;
+    box-shadow: var(--shadow);
+  }
+
+  /* Top Toolbar: Presets on left, Reset Form safely separated on right */
+  .card-toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    flex-wrap: wrap;
+    padding-bottom: 1.25rem;
+    margin-bottom: 1.5rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .preset-group {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+  }
+
+  .toolbar-label {
+    font-size: 0.78rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--muted);
+    margin-right: 0.25rem;
+  }
+
+  .preset {
+    background: var(--surface-2);
+    color: var(--text);
+    border: 1px solid var(--border);
+    padding: 0.5rem 0.95rem;
+    border-radius: 999px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.18s ease;
+  }
+
+  .preset:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+
+  .preset.active {
+    background: linear-gradient(135deg, var(--accent), #0284c7);
+    color: #070d19;
+    border-color: transparent;
+    box-shadow: 0 4px 14px rgba(56, 189, 248, 0.35);
+  }
+
+  .btn-reset {
+    background: transparent;
+    color: var(--muted);
+    border: 1px solid var(--border);
+    padding: 0.48rem 0.9rem;
+    border-radius: var(--radius-md);
+    font-size: 0.84rem;
+    font-weight: 600;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    transition: all 0.18s ease;
+  }
+
+  .btn-reset:hover {
+    color: var(--danger);
+    border-color: rgba(251, 113, 133, 0.45);
+    background: var(--danger-bg);
+  }
+
+  /* Quick Import Banner */
+  .import-box {
+    background: rgba(11, 18, 32, 0.65);
+    border: 1px dashed rgba(56, 189, 248, 0.35);
+    border-radius: var(--radius-md);
+    padding: 1.1rem 1.25rem;
+    margin-bottom: 1.75rem;
+  }
+
+  .import-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 0.5rem;
+    gap: 0.5rem;
+  }
+
+  .import-title {
+    font-size: 0.88rem;
+    font-weight: 700;
+    color: var(--accent);
+  }
+
+  .import-badge {
+    font-size: 0.72rem;
+    color: var(--muted);
+    background: var(--surface-2);
+    padding: 0.15rem 0.55rem;
+    border-radius: 999px;
+  }
+
+  /* Form Sections */
+  .form-section {
+    margin-top: 1.75rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--border);
+  }
+
+  .form-section:first-of-type {
+    margin-top: 0;
+    padding-top: 0;
+    border-top: none;
+  }
+
+  .section-title {
+    margin: 0 0 1rem;
+    font-size: 0.82rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    color: var(--accent);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .section-title::after {
+    content: "";
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  .field { margin-bottom: 1rem; }
+  .field:last-child { margin-bottom: 0; }
+
+  label {
+    display: block;
+    font-size: 0.83rem;
+    font-weight: 600;
+    color: #cbd5e1;
+    margin-bottom: 0.4rem;
+  }
+
+  input, select, textarea {
+    width: 100%;
+    background: var(--input-bg);
+    border: 1px solid var(--border);
+    color: var(--text);
+    border-radius: var(--radius-md);
+    padding: 0.68rem 0.9rem;
+    font-size: 0.94rem;
+    font-family: inherit;
+    transition: border-color 0.18s ease, box-shadow 0.18s ease;
+  }
+
+  textarea { min-height: 76px; resize: vertical; }
+
+  input:focus, select:focus, textarea:focus {
+    outline: none;
+    border-color: var(--border-focus);
+    box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.16);
+  }
+
+  input[type="file"] {
+    padding: 0.48rem 0.7rem;
+    cursor: pointer;
+  }
+
+  .row-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+  }
+
+  .row-3 {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 1rem;
+  }
+
+  @media (max-width: 720px) {
+    .row-2, .row-3 { grid-template-columns: 1fr; }
+  }
+
+  .url-row { display: flex; gap: 0.65rem; flex-wrap: wrap; }
+  .url-row input { flex: 1; min-width: 220px; }
+
+  .hint {
+    font-size: 0.79rem;
+    color: var(--muted);
+    margin-top: 0.35rem;
+  }
+
+  .hint code {
+    color: #cbd5e1;
+    background: rgba(255, 255, 255, 0.06);
+    padding: 0.1rem 0.35rem;
+    border-radius: 4px;
+  }
+
+  /* Primary & Secondary Buttons */
+  .btn-primary {
+    background: linear-gradient(135deg, var(--accent), #0284c7);
+    color: #070d19;
+    border: none;
+    border-radius: var(--radius-md);
+    padding: 0.78rem 1.5rem;
+    font-weight: 700;
+    cursor: pointer;
+    font-size: 0.96rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    box-shadow: 0 6px 20px rgba(56, 189, 248, 0.28);
+    transition: transform 0.15s ease, box-shadow 0.15s ease, filter 0.15s ease;
+  }
+
+  .btn-primary:hover {
+    filter: brightness(1.06);
+    transform: translateY(-1px);
+    box-shadow: 0 8px 24px rgba(56, 189, 248, 0.38);
+  }
+
+  .btn-primary:active { transform: translateY(0); }
+
+  .btn-secondary {
+    background: var(--surface-2);
+    color: var(--text);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: 0.65rem 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    font-size: 0.88rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    transition: border-color 0.18s ease, background 0.18s ease;
+  }
+
+  .btn-secondary:hover {
+    border-color: var(--accent);
+    background: #263449;
+  }
+
+  .submit-bar {
+    margin-top: 1.75rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+
+  .submit-note {
+    font-size: 0.82rem;
+    color: var(--muted);
+  }
+
+  /* Gradient Preview Swatch */
+  .gradient-wrap {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+  }
+
+  .gradient-swatch {
+    width: 42px;
+    height: 42px;
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border);
+    flex-shrink: 0;
+  }
+
+  /* Output Card */
+  #output {
+    background: #060b14;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: 1.15rem;
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    font-size: 0.83rem;
+    line-height: 1.55;
+    color: #e2e8f0;
+    white-space: pre-wrap;
+    word-break: break-word;
+    max-height: 480px;
+    overflow: auto;
+    margin-top: 1rem;
+  }
+
+  .result-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+  }
+
+  .result-actions {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+  }
+
+  .howto {
+    background: rgba(56, 189, 248, 0.06);
+    border-left: 3px solid var(--accent);
+    padding: 1rem 1.25rem;
+    border-radius: 0 var(--radius-md) var(--radius-md) 0;
+    margin-top: 1.15rem;
+    font-size: 0.88rem;
+    color: #cbd5e1;
+  }
+
+  .howto strong { color: var(--accent); }
+  .howto ol { margin: 0.45rem 0 0; padding-left: 1.25rem; }
+  .howto li { margin-bottom: 0.25rem; }
+
+  .status { font-size: 0.83rem; margin-top: 0.5rem; min-height: 1.2em; }
+  .status.ok { color: var(--success); }
+  .status.err { color: var(--danger); }
+</style>
+</head>
+<body>
+<div class="container">
+  <header>
+    <div class="brand-pill">SMART English · Developer Utility</div>
+    <h1>Catalog Entry Maker <span style="font-size:0.65em; opacity:0.75;">v1.3</span></h1>
+    <p class="subtitle">Generate formatted entries for <code>catalog.js</code> in the Digital Learning Showcase</p>
+  </header>
+
+  <div class="card">
+    <!-- Top Toolbar: Presets + Separated Reset Form Action -->
+    <div class="card-toolbar">
+      <div class="preset-group">
+        <span class="toolbar-label">Template:</span>
+        <button type="button" class="preset" data-type="application">New Application</button>
+        <button type="button" class="preset" data-type="project">Project / Family</button>
+        <button type="button" class="preset" data-type="legacy">Legacy Entry</button>
+      </div>
+      <button type="button" class="btn-reset" id="resetBtn" title="Clear all inputs and restore defaults">
+        ↺ Reset Form
+      </button>
+    </div>
+
+    <!-- Optional Quick Import -->
+    <div class="import-box">
+      <div class="import-header">
+        <span class="import-title">Quick Auto-Fill from README.md</span>
+        <span class="import-badge">Offline · Local Only</span>
+      </div>
+      <div class="url-row">
+        <input type="file" id="readmeFile" accept=".md,.markdown,.txt">
+        <button type="button" class="btn-secondary" id="readmeBtn">Extract Fields</button>
+      </div>
+      <div class="status" id="readmeStatus"></div>
+      <div class="hint">Extracts the first <code>#</code> heading, opening summary paragraph, and first <code>https://</code> link.</div>
+    </div>
+
+    <!-- Section 1: Identity & Classification -->
+    <div class="form-section">
+      <h2 class="section-title">1. Identity &amp; Classification</h2>
+      <div class="row-2">
+        <div class="field">
+          <label for="title">Title</label>
+          <input type="text" id="title" placeholder="Pizza Word Race">
+        </div>
+        <div class="field">
+          <label for="id">ID (URL slug for #/project/…)</label>
+          <input type="text" id="id" placeholder="g5-t1-pizza-word-race">
+        </div>
+      </div>
+
+      <div class="field">
+        <label for="subtitle">Subtitle</label>
+        <input type="text" id="subtitle" placeholder="School Life · Simultaneous Team Spelling Race">
+      </div>
+
+      <div class="row-3">
+        <div class="field">
+          <label for="type">Catalog Type</label>
+          <select id="type">
+            <option value="application">application</option>
+            <option value="project">project</option>
+            <option value="legacy">legacy</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="status">Status</label>
+          <select id="status">
+            <option>Released</option>
+            <option>Demo</option>
+            <option>In Development</option>
+            <option>Legacy</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="year">Year</label>
+          <input type="text" id="year" value="2026">
+        </div>
+      </div>
+
+      <div class="row-3">
+        <div class="field">
+          <label for="grade">Grade</label>
+          <input type="text" id="grade" placeholder="Grade 5" value="Grade 5">
+        </div>
+        <div class="field">
+          <label for="theme">Theme</label>
+          <select id="theme">
+            <option value="">(none)</option>
+            <option>Theme 1</option>
+            <option>Theme 2</option>
+            <option>Theme 3</option>
+            <option>Theme 4</option>
+            <option>Theme 5</option>
+            <option>Theme 6</option>
+            <option>Theme 7</option>
+            <option>Theme 8</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="family">Family</label>
+          <input type="text" id="family" placeholder="SMART Classroom Games">
+        </div>
+      </div>
+
+      <div class="field" id="eraField">
+        <label for="era">Era (for Legacy entries — e.g. "Adobe Animate &amp; ActionScript 3 (2016–2019)")</label>
+        <input type="text" id="era" placeholder="Adobe Animate &amp; ActionScript 3 (2016–2019)">
+      </div>
+    </div>
+
+    <!-- Section 2: Pedagogical Description -->
+    <div class="form-section">
+      <h2 class="section-title">2. Description &amp; Tech Stack</h2>
+      <div class="field">
+        <label for="summary">Summary</label>
+        <textarea id="summary" placeholder="Short description of what the app does…"></textarea>
+      </div>
+      <div class="field">
+        <label for="purpose">Pedagogical Purpose</label>
+        <textarea id="purpose" placeholder="Learning goal or classroom objective…"></textarea>
+      </div>
+      <div class="field">
+        <label for="tech">Technologies (comma-separated)</label>
+        <input type="text" id="tech" value="HTML5, CSS3, Vanilla JavaScript, Cloudflare Workers">
+      </div>
+    </div>
+
+    <!-- Section 3: Deployment, Visuals & Video -->
+    <div class="form-section">
+      <h2 class="section-title">3. Demo, Visuals &amp; Video</h2>
+      <div class="row-2">
+        <div class="field">
+          <label for="demoUrl">Demo URL</label>
+          <input type="url" id="demoUrl" placeholder="https://…">
+        </div>
+        <div class="field">
+          <label for="embedMode">Embed Mode</label>
+          <select id="embedMode">
+            <option value="inline">inline (iframe + new tab)</option>
+            <option value="external-first">external-first (Storyline 360)</option>
+            <option value="none">none (legacy archive)</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="field">
+        <label for="demoNote">Demo Note (optional — shown on detail page)</label>
+        <textarea id="demoNote" placeholder="Articulate Storyline 360 publications launch directly in a full browser tab…"></textarea>
+      </div>
+
+      <div class="row-2">
+        <div class="field">
+          <label for="icon">Card Icon (emoji)</label>
+          <input type="text" id="icon" value="🎮" maxlength="4">
+        </div>
+        <div class="field">
+          <label for="gradient">Card Banner Gradient (CSS)</label>
+          <div class="gradient-wrap">
+            <input type="text" id="gradient" value="linear-gradient(135deg, #38bdf8, #0284c7)">
+            <div class="gradient-swatch" id="gradientSwatch" title="Live gradient preview"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row-2">
+        <div class="field">
+          <label for="videoTitle">Walkthrough Video Title (optional)</label>
+          <input type="text" id="videoTitle" placeholder="Classroom Gameplay Walkthrough">
+        </div>
+        <div class="field">
+          <label for="videoUrl">YouTube URL (watch, short, or embed link)</label>
+          <input type="url" id="videoUrl" placeholder="https://www.youtube.com/watch?v=VIDEO_ID">
+        </div>
+      </div>
+      <div class="hint">Standard <code>youtube.com/watch</code>, <code>youtu.be</code>, and <code>/shorts/</code> links automatically convert to <code>youtube.com/embed/</code> format.</div>
+    </div>
+
+    <!-- Dedicated Primary Action Bar -->
+    <div class="submit-bar">
+      <span class="submit-note">Outputs a valid JavaScript object ready for <code>window.SHOWCASE_CATALOG</code>.</span>
+      <button type="button" class="btn-primary" id="generateBtn">✦ Generate Catalog Block</button>
+    </div>
+  </div>
+
+  <!-- Output Card -->
+  <div class="card" id="resultCard" style="display:none;">
+    <div class="result-header">
+      <h2 style="margin:0; font-size:1.15rem;">Generated Entry</h2>
+      <div class="result-actions">
+        <button type="button" class="btn-primary" id="copyBtn" style="padding:0.55rem 1.1rem; font-size:0.88rem;">Copy Code</button>
+        <button type="button" class="btn-secondary" id="downloadBtn">Download .txt</button>
+      </div>
+    </div>
+    <pre id="output"></pre>
+    <div class="howto">
+      <strong>How to add to your Showcase:</strong>
+      <ol>
+        <li>Open <code>catalog.js</code> in the <strong>Web-Apps-Hub</strong> project.</li>
+        <li>Scroll to the end of the <code>window.SHOWCASE_CATALOG = [ … ]</code> array.</li>
+        <li>Paste this block just before the closing <code>];</code> (ensure the preceding object ends with a comma).</li>
+        <li>Save and redeploy—overview stats, filters, Legacy era groups, and the Videos tab update automatically.</li>
+      </ol>
+    </div>
+  </div>
+</div>
+
+<script>
+const $ = id => document.getElementById(id);
+
+let idManuallyEdited = false;
+
+const presets = {
+  application: {
+    type: "application",
+    family: "SMART Classroom Games",
+    status: "Released",
+    grade: "Grade 5",
+    theme: "Theme 1",
+    embedMode: "inline",
+    tech: "HTML5, CSS3, Vanilla JavaScript, Cloudflare Workers",
+    icon: "🎮",
+    era: "",
+    gradient: "linear-gradient(135deg, #38bdf8, #0284c7)"
+  },
+  project: {
+    type: "project",
+    family: "",
+    status: "Demo",
+    grade: "Primary",
+    theme: "",
+    embedMode: "external-first",
+    tech: "Articulate Storyline 360, HTML5 / JS Web Objects, Cloudflare Workers",
+    icon: "📚",
+    era: "",
+    gradient: "linear-gradient(135deg, #0284c7, #1e3a8a)"
+  },
+  legacy: {
+    type: "legacy",
+    family: "Adobe Animate & ActionScript 3 Era",
+    status: "Legacy",
+    grade: "Primary",
+    theme: "",
+    embedMode: "none",
+    tech: "Adobe Animate, ActionScript 3.0",
+    icon: "🎞️",
+    era: "Adobe Animate & ActionScript 3 (2016–2019)",
+    gradient: "linear-gradient(135deg, #6d28d9, #3b0764)"
+  }
+};
+
+function slugify(text) {
+  return text
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-|-$/g, "")
+    .slice(0, 48);
+}
+
+function updateGradientPreview() {
+  const val = $("gradient").value.trim() || "linear-gradient(135deg, #38bdf8, #0284c7)";
+  $("gradientSwatch").style.background = val;
+}
+
+function normalizeYouTubeUrl(raw) {
+  const input = String(raw || "").trim();
+  if (!input) return "";
+  try {
+    const u = new URL(input);
+    const host = u.hostname.replace(/^www\./, "");
+    let videoId = "";
+
+    if (host === "youtu.be") {
+      videoId = u.pathname.replace(/^\/+/, "").split("/")[0];
+    } else if (host === "youtube.com" || host === "m.youtube.com" || host === "youtube-nocookie.com") {
+      if (u.pathname === "/watch") {
+        videoId = u.searchParams.get("v") || "";
+      } else if (u.pathname.startsWith("/embed/")) {
+        videoId = u.pathname.slice("/embed/".length).split("/")[0];
+      } else if (u.pathname.startsWith("/shorts/")) {
+        videoId = u.pathname.slice("/shorts/".length).split("/")[0];
+      } else if (u.pathname.startsWith("/live/")) {
+        videoId = u.pathname.slice("/live/".length).split("/")[0];
+      }
+    }
+
+    if (videoId) {
+      return `https://www.youtube.com/embed/${videoId}`;
+    }
+  } catch (e) {
+    // Keep trimmed input if not a standard URL
+  }
+  return input;
+}
+
+document.querySelectorAll(".preset").forEach(btn => {
+  btn.addEventListener("click", () => {
+    document.querySelectorAll(".preset").forEach(b => b.classList.remove("active"));
+    btn.classList.add("active");
+    const p = presets[btn.dataset.type];
+    Object.keys(p).forEach(key => {
+      const el = $(key);
+      if (el) el.value = p[key];
+    });
+    updateGradientPreview();
+    idManuallyEdited = false;
+  });
+});
+
+// Default preset
+document.querySelector('[data-type="application"]').click();
+
+$("gradient").addEventListener("input", updateGradientPreview);
+
+// Auto-slug from title until user edits ID
+$("title").addEventListener("input", () => {
+  if (!idManuallyEdited && $("title").value.trim()) {
+    $("id").value = slugify($("title").value);
+  }
+});
+
+$("id").addEventListener("input", () => {
+  idManuallyEdited = true;
+});
+
+$("readmeBtn").addEventListener("click", () => {
+  const file = $("readmeFile").files[0];
+  const status = $("readmeStatus");
+  if (!file) {
+    status.textContent = "Please choose a README.md file first.";
+    status.className = "status err";
+    return;
+  }
+  status.textContent = "Reading…";
+  status.className = "status";
+
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    const text = e.target.result || "";
+    extractFromReadme(text);
+    status.textContent = "Extracted available fields from README ✓";
+    status.className = "status ok";
+  };
+  reader.onerror = () => {
+    status.textContent = "Could not read the file.";
+    status.className = "status err";
+  };
+  reader.readAsText(file);
+});
+
+function extractFromReadme(md) {
+  const headingMatch = md.match(/^#\s+(.+)$/m);
+  if (headingMatch) {
+    const cleanTitle = headingMatch[1].replace(/[*_`]/g, "").trim().slice(0, 100);
+    $("title").value = cleanTitle;
+    if (!idManuallyEdited) $("id").value = slugify(cleanTitle);
+  }
+
+  const lines = md.split(/\r?\n/);
+  let paragraph = "";
+  for (const line of lines) {
+    const trimmed = line.trim();
+    if (trimmed && !trimmed.startsWith("#") && !trimmed.startsWith("!") && !trimmed.startsWith("[") && !trimmed.startsWith("---")) {
+      paragraph = trimmed.replace(/[*_`]/g, "").replace(/\[([^\]]+)\]\([^)]+\)/g, "$1");
+      break;
+    }
+  }
+  if (paragraph) $("summary").value = paragraph.slice(0, 400);
+
+  const linkMatch = md.match(/https?:\/\/[^\s)]+/);
+  if (linkMatch) $("demoUrl").value = linkMatch[0];
+}
+
+function escapeStr(s) {
+  return String(s || "").replace(/\\/g, "\\\\").replace(/"/g, '\\"').replace(/\r?\n/g, "\\n");
+}
+
+function generate() {
+  const id = $("id").value.trim() || "new-entry";
+  const type = $("type").value;
+  const title = $("title").value.trim();
+  const subtitle = $("subtitle").value.trim();
+  const summary = $("summary").value.trim();
+  const purpose = $("purpose").value.trim();
+  const grade = $("grade").value.trim();
+  const theme = $("theme").value;
+  const status = $("status").value;
+  const year = $("year").value.trim();
+  const icon = $("icon").value.trim() || "📄";
+  const family = $("family").value.trim();
+  const era = $("era").value.trim();
+  const tech = $("tech").value.split(",").map(t => t.trim()).filter(Boolean);
+  const demoUrl = $("demoUrl").value.trim();
+  const embedMode = $("embedMode").value;
+  const demoNote = $("demoNote").value.trim();
+  const gradient = $("gradient").value.trim() || "linear-gradient(135deg, #38bdf8, #0284c7)";
+  const videoTitle = $("videoTitle").value.trim();
+  const normalizedVideoUrl = normalizeYouTubeUrl($("videoUrl").value);
+
+  if (normalizedVideoUrl && normalizedVideoUrl !== $("videoUrl").value.trim()) {
+    $("videoUrl").value = normalizedVideoUrl;
+  }
+
+  const techLines = tech.map(t => `      "${escapeStr(t)}"`).join(",\n");
+
+  let demoBlock = `    demo: {\n      url: ${demoUrl ? `"${escapeStr(demoUrl)}"` : "null"},\n      embedMode: "${embedMode}"`;
+  if (embedMode === "inline") demoBlock += `,\n      aspectRatio: "16:9"`;
+  if (demoNote) demoBlock += `,\n      note: "${escapeStr(demoNote)}"`;
+  demoBlock += `\n    }`;
+
+  let videosBlock = "    videos: []";
+  if (normalizedVideoUrl) {
+    const vTitle = videoTitle || "Walkthrough";
+    videosBlock = `    videos: [\n      {\n        title: "${escapeStr(vTitle)}",\n        embedUrl: "${escapeStr(normalizedVideoUrl)}"\n      }\n    ]`;
+  }
+
+  const block = `{
+    id: "${escapeStr(id)}",
+    type: "${type}",
+    family: ${family ? `"${escapeStr(family)}"` : "null"},
+    status: "${status}",
+    grade: "${escapeStr(grade)}",
+    theme: ${theme ? `"${theme}"` : "null"},
+    era: ${era ? `"${escapeStr(era)}"` : "null"},
+    year: "${escapeStr(year)}",
+    title: "${escapeStr(title)}",
+    subtitle: ${subtitle ? `"${escapeStr(subtitle)}"` : "null"},
+    icon: "${escapeStr(icon)}",
+    gradient: "${escapeStr(gradient)}",
+    summary: "${escapeStr(summary)}",
+    purpose: "${escapeStr(purpose)}",
+    tech: [
+${techLines}
+    ],
+${demoBlock},
+    screenshots: [],
+${videosBlock}
+  },`;
+
+  $("output").textContent = block;
+  $("resultCard").style.display = "block";
+  $("resultCard").scrollIntoView({ behavior: "smooth", block: "nearest" });
+}
+
+$("generateBtn").addEventListener("click", generate);
+
+$("copyBtn").addEventListener("click", () => {
+  const text = $("output").textContent;
+  navigator.clipboard.writeText(text).then(() => {
+    const btn = $("copyBtn");
+    const orig = btn.textContent;
+    btn.textContent = "Copied ✓";
+    setTimeout(() => btn.textContent = orig, 1500);
+  });
+});
+
+$("downloadBtn").addEventListener("click", () => {
+  const text = $("output").textContent;
+  const blob = new Blob([text], { type: "text/plain" });
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = ($("id").value.trim() || "catalog-entry") + ".txt";
+  a.click();
+  URL.revokeObjectURL(a.href);
+});
+
+$("resetBtn").addEventListener("click", () => {
+  document.querySelectorAll("input, textarea").forEach(el => {
+    if (!["year", "tech", "gradient", "icon"].includes(el.id)) el.value = "";
+  });
+  $("readmeFile").value = "";
+  $("year").value = "2026";
+  $("tech").value = "HTML5, CSS3, Vanilla JavaScript, Cloudflare Workers";
+  $("gradient").value = "linear-gradient(135deg, #38bdf8, #0284c7)";
+  $("icon").value = "🎮";
+  $("readmeStatus").textContent = "";
+  $("resultCard").style.display = "none";
+  idManuallyEdited = false;
+  document.querySelector('[data-type="application"]').click();
+});
+</script>
+</body>
+</html>
