@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SMART English · Catalog Entry Maker v1.3</title>
+<title>SMART English · Catalog Entry Maker v1.4</title>
 <style>
   :root {
     --bg: #070d19;
@@ -17,8 +17,10 @@
     --accent-hover: #7dd3fc;
     --accent-2: #818cf8;
     --success: #34d399;
+    --warning: #fbbf24;
+    --warning-bg: rgba(251, 191, 36, 0.12);
     --danger: #fb7185;
-    --danger-bg: rgba(251, 113, 133, 0.1);
+    --danger-bg: rgba(251, 113, 133, 0.12);
     --border: rgba(148, 163, 184, 0.18);
     --border-focus: #38bdf8;
     --radius-lg: 16px;
@@ -43,7 +45,6 @@
 
   .container { max-width: 960px; margin: 0 auto; }
 
-  /* Header */
   header {
     text-align: center;
     margin-bottom: 2rem;
@@ -89,7 +90,6 @@
     font-size: 0.88em;
   }
 
-  /* Main Card */
   .card {
     background: var(--surface);
     border: 1px solid var(--border);
@@ -99,7 +99,6 @@
     box-shadow: var(--shadow);
   }
 
-  /* Top Toolbar: Presets on left, Reset Form safely separated on right */
   .card-toolbar {
     display: flex;
     align-items: center;
@@ -172,13 +171,22 @@
     background: var(--danger-bg);
   }
 
-  /* Quick Import Banner */
+  .import-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin-bottom: 1.75rem;
+  }
+
+  @media (max-width: 760px) {
+    .import-grid { grid-template-columns: 1fr; }
+  }
+
   .import-box {
     background: rgba(11, 18, 32, 0.65);
     border: 1px dashed rgba(56, 189, 248, 0.35);
     border-radius: var(--radius-md);
-    padding: 1.1rem 1.25rem;
-    margin-bottom: 1.75rem;
+    padding: 1rem 1.15rem;
   }
 
   .import-header {
@@ -190,20 +198,19 @@
   }
 
   .import-title {
-    font-size: 0.88rem;
+    font-size: 0.86rem;
     font-weight: 700;
     color: var(--accent);
   }
 
   .import-badge {
-    font-size: 0.72rem;
+    font-size: 0.7rem;
     color: var(--muted);
     background: var(--surface-2);
-    padding: 0.15rem 0.55rem;
+    padding: 0.15rem 0.5rem;
     border-radius: 999px;
   }
 
-  /* Form Sections */
   .form-section {
     margin-top: 1.75rem;
     padding-top: 1.5rem;
@@ -246,6 +253,11 @@
     margin-bottom: 0.4rem;
   }
 
+  .req {
+    color: var(--danger);
+    margin-left: 0.2rem;
+  }
+
   input, select, textarea {
     width: 100%;
     background: var(--input-bg);
@@ -266,9 +278,15 @@
     box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.16);
   }
 
+  input.invalid {
+    border-color: var(--danger);
+    box-shadow: 0 0 0 3px rgba(251, 113, 133, 0.18);
+  }
+
   input[type="file"] {
-    padding: 0.48rem 0.7rem;
+    padding: 0.45rem 0.65rem;
     cursor: pointer;
+    font-size: 0.85rem;
   }
 
   .row-2 {
@@ -287,8 +305,8 @@
     .row-2, .row-3 { grid-template-columns: 1fr; }
   }
 
-  .url-row { display: flex; gap: 0.65rem; flex-wrap: wrap; }
-  .url-row input { flex: 1; min-width: 220px; }
+  .url-row { display: flex; gap: 0.55rem; flex-wrap: wrap; }
+  .url-row input { flex: 1; min-width: 170px; }
 
   .hint {
     font-size: 0.79rem;
@@ -303,7 +321,76 @@
     border-radius: 4px;
   }
 
-  /* Primary & Secondary Buttons */
+  .alert-banner {
+    padding: 0.75rem 1rem;
+    border-radius: var(--radius-md);
+    font-size: 0.85rem;
+    margin-top: 0.5rem;
+    display: none;
+  }
+
+  .alert-banner.warn {
+    display: block;
+    background: var(--warning-bg);
+    border: 1px solid rgba(251, 191, 36, 0.4);
+    color: var(--warning);
+  }
+
+  .alert-banner.err {
+    display: block;
+    background: var(--danger-bg);
+    border: 1px solid rgba(251, 113, 133, 0.45);
+    color: var(--danger);
+  }
+
+  /* Child Modules Repeater */
+  .children-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+    margin-bottom: 0.75rem;
+  }
+
+  .child-card {
+    background: rgba(11, 18, 32, 0.75);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    padding: 1rem;
+    margin-bottom: 0.85rem;
+  }
+
+  .child-card-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 0.75rem;
+  }
+
+  .child-badge {
+    font-size: 0.76rem;
+    font-weight: 700;
+    color: var(--accent);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .btn-remove {
+    background: transparent;
+    color: var(--danger);
+    border: 1px solid rgba(251, 113, 133, 0.35);
+    border-radius: 6px;
+    padding: 0.25rem 0.6rem;
+    font-size: 0.78rem;
+    font-weight: 600;
+    cursor: pointer;
+  }
+
+  .btn-remove:hover {
+    background: var(--danger-bg);
+  }
+
   .btn-primary {
     background: linear-gradient(135deg, var(--accent), #0284c7);
     color: #070d19;
@@ -334,10 +421,10 @@
     color: var(--text);
     border: 1px solid var(--border);
     border-radius: var(--radius-md);
-    padding: 0.65rem 1.1rem;
+    padding: 0.58rem 1rem;
     font-weight: 600;
     cursor: pointer;
-    font-size: 0.88rem;
+    font-size: 0.85rem;
     display: inline-flex;
     align-items: center;
     gap: 0.45rem;
@@ -365,7 +452,6 @@
     color: var(--muted);
   }
 
-  /* Gradient Preview Swatch */
   .gradient-wrap {
     display: flex;
     align-items: center;
@@ -373,14 +459,13 @@
   }
 
   .gradient-swatch {
-    width: 42px;
-    height: 42px;
+    width: 44px;
+    height: 44px;
     border-radius: var(--radius-md);
     border: 1px solid var(--border);
     flex-shrink: 0;
   }
 
-  /* Output Card */
   #output {
     background: #060b14;
     border: 1px solid var(--border);
@@ -425,21 +510,23 @@
   .howto ol { margin: 0.45rem 0 0; padding-left: 1.25rem; }
   .howto li { margin-bottom: 0.25rem; }
 
-  .status { font-size: 0.83rem; margin-top: 0.5rem; min-height: 1.2em; }
+  .status { font-size: 0.81rem; margin-top: 0.45rem; min-height: 1.2em; }
   .status.ok { color: var(--success); }
+  .status.warn { color: var(--warning); }
   .status.err { color: var(--danger); }
+  .hidden { display: none; }
 </style>
 </head>
 <body>
 <div class="container">
   <header>
     <div class="brand-pill">SMART English · Developer Utility</div>
-    <h1>Catalog Entry Maker <span style="font-size:0.65em; opacity:0.75;">v1.3</span></h1>
-    <p class="subtitle">Generate formatted entries for <code>catalog.js</code> in the Digital Learning Showcase</p>
+    <h1>Catalog Entry Maker <span style="font-size:0.65em; opacity:0.75;">v1.4</span></h1>
+    <p class="subtitle">Generate validated entries for <code>catalog.js</code> in the Digital Learning Showcase</p>
   </header>
 
   <div class="card">
-    <!-- Top Toolbar: Presets + Separated Reset Form Action -->
+    <!-- Top Toolbar -->
     <div class="card-toolbar">
       <div class="preset-group">
         <span class="toolbar-label">Template:</span>
@@ -452,18 +539,33 @@
       </button>
     </div>
 
-    <!-- Optional Quick Import -->
-    <div class="import-box">
-      <div class="import-header">
-        <span class="import-title">Quick Auto-Fill from README.md</span>
-        <span class="import-badge">Offline · Local Only</span>
+    <!-- Quick Import & Duplicate ID Check Tools -->
+    <div class="import-grid">
+      <div class="import-box">
+        <div class="import-header">
+          <span class="import-title">1. Auto-Fill from README.md</span>
+          <span class="import-badge">Optional</span>
+        </div>
+        <div class="url-row">
+          <input type="file" id="readmeFile" accept=".md,.markdown,.txt">
+          <button type="button" class="btn-secondary" id="readmeBtn">Extract</button>
+        </div>
+        <div class="status" id="readmeStatus"></div>
+        <div class="hint">Extracts heading, opening paragraph, and first <code>https://</code> URL.</div>
       </div>
-      <div class="url-row">
-        <input type="file" id="readmeFile" accept=".md,.markdown,.txt">
-        <button type="button" class="btn-secondary" id="readmeBtn">Extract Fields</button>
+
+      <div class="import-box">
+        <div class="import-header">
+          <span class="import-title">2. Duplicate ID Guard (catalog.js)</span>
+          <span class="import-badge" id="catalogCountBadge">0 IDs loaded</span>
+        </div>
+        <div class="url-row">
+          <input type="file" id="catalogFile" accept=".js,.txt">
+          <button type="button" class="btn-secondary" id="catalogBtn">Load IDs</button>
+        </div>
+        <div class="status" id="catalogStatus"></div>
+        <div class="hint">Select <code>catalog.js</code> once to warn if an ID already exists.</div>
       </div>
-      <div class="status" id="readmeStatus"></div>
-      <div class="hint">Extracts the first <code>#</code> heading, opening summary paragraph, and first <code>https://</code> link.</div>
     </div>
 
     <!-- Section 1: Identity & Classification -->
@@ -471,12 +573,13 @@
       <h2 class="section-title">1. Identity &amp; Classification</h2>
       <div class="row-2">
         <div class="field">
-          <label for="title">Title</label>
+          <label for="title">Title <span class="req">*</span></label>
           <input type="text" id="title" placeholder="Pizza Word Race">
         </div>
         <div class="field">
-          <label for="id">ID (URL slug for #/project/…)</label>
+          <label for="id">ID (URL slug for #/project/…) <span class="req">*</span></label>
           <input type="text" id="id" placeholder="g5-t1-pizza-word-race">
+          <div id="duplicateAlert" class="alert-banner warn"></div>
         </div>
       </div>
 
@@ -544,7 +647,7 @@
     <div class="form-section">
       <h2 class="section-title">2. Description &amp; Tech Stack</h2>
       <div class="field">
-        <label for="summary">Summary</label>
+        <label for="summary">Summary <span class="req">*</span></label>
         <textarea id="summary" placeholder="Short description of what the app does…"></textarea>
       </div>
       <div class="field">
@@ -586,11 +689,26 @@
           <input type="text" id="icon" value="🎮" maxlength="4">
         </div>
         <div class="field">
-          <label for="gradient">Card Banner Gradient (CSS)</label>
+          <label for="gradientSelect">Card Banner Gradient</label>
           <div class="gradient-wrap">
-            <input type="text" id="gradient" value="linear-gradient(135deg, #38bdf8, #0284c7)">
+            <select id="gradientSelect">
+              <option value="linear-gradient(135deg, #38bdf8, #0284c7)">Ocean Sky (Sky → Cobalt)</option>
+              <option value="linear-gradient(135deg, #0284c7, #1e3a8a)">Deep Navy (SMART Readers)</option>
+              <option value="linear-gradient(135deg, #f97316, #dc2626)">Sunset Ember (Orange → Crimson)</option>
+              <option value="linear-gradient(135deg, #f59e0b, #ea580c)">Warm Amber (Match &amp; Catch)</option>
+              <option value="linear-gradient(135deg, #10b981, #059669)">Emerald Meadow (Green)</option>
+              <option value="linear-gradient(135deg, #84cc16, #15803d)">Fresh Lime (Lime → Forest)</option>
+              <option value="linear-gradient(135deg, #14b8a6, #0f766e)">Teal Lagoon (Teal)</option>
+              <option value="linear-gradient(135deg, #6366f1, #4338ca)">Royal Indigo (Indigo)</option>
+              <option value="linear-gradient(135deg, #8b5cf6, #5b21b6)">Violet Dusk (Purple)</option>
+              <option value="linear-gradient(135deg, #ec4899, #be185d)">Magenta Berry (Pink → Rose)</option>
+              <option value="linear-gradient(135deg, #6d28d9, #3b0764)">Archive Plum (Legacy AS3)</option>
+              <option value="linear-gradient(135deg, #0f766e, #134e4a)">Archive Slate Teal (Legacy XML)</option>
+              <option value="custom">Custom CSS gradient…</option>
+            </select>
             <div class="gradient-swatch" id="gradientSwatch" title="Live gradient preview"></div>
           </div>
+          <input type="text" id="gradientCustom" class="hidden" style="margin-top:0.55rem;" placeholder="linear-gradient(135deg, #38bdf8, #0284c7)">
         </div>
       </div>
 
@@ -607,9 +725,20 @@
       <div class="hint">Standard <code>youtube.com/watch</code>, <code>youtu.be</code>, and <code>/shorts/</code> links automatically convert to <code>youtube.com/embed/</code> format.</div>
     </div>
 
-    <!-- Dedicated Primary Action Bar -->
+    <!-- Section 4: Included Modules / Child Builds -->
+    <div class="form-section">
+      <div class="children-header">
+        <h2 class="section-title" style="margin:0; flex:1;">4. Included Modules / Child Builds (Optional)</h2>
+        <button type="button" class="btn-secondary" id="addChildBtn">+ Add Child Module</button>
+      </div>
+      <div class="hint" style="margin-bottom:0.85rem;">Use for multi-part families like <strong>SMART Readers</strong> (Grade 02, Grade 03 with separate URLs) or <strong>SMART Match &amp; Catch</strong> (Number Pop, Letter Pop without separate URLs).</div>
+      <div id="childrenContainer"></div>
+    </div>
+
+    <!-- Validation Alert & Submit Bar -->
+    <div id="validationAlert" class="alert-banner err"></div>
     <div class="submit-bar">
-      <span class="submit-note">Outputs a valid JavaScript object ready for <code>window.SHOWCASE_CATALOG</code>.</span>
+      <span class="submit-note">Fields marked <span class="req">*</span> are required. Outputs a valid object for <code>window.SHOWCASE_CATALOG</code>.</span>
       <button type="button" class="btn-primary" id="generateBtn">✦ Generate Catalog Block</button>
     </div>
   </div>
@@ -623,6 +752,7 @@
         <button type="button" class="btn-secondary" id="downloadBtn">Download .txt</button>
       </div>
     </div>
+    <div class="status" id="copyStatus"></div>
     <pre id="output"></pre>
     <div class="howto">
       <strong>How to add to your Showcase:</strong>
@@ -640,6 +770,7 @@
 const $ = id => document.getElementById(id);
 
 let idManuallyEdited = false;
+const knownCatalogIds = new Set();
 
 const presets = {
   application: {
@@ -652,7 +783,7 @@ const presets = {
     tech: "HTML5, CSS3, Vanilla JavaScript, Cloudflare Workers",
     icon: "🎮",
     era: "",
-    gradient: "linear-gradient(135deg, #38bdf8, #0284c7)"
+    gradientSelect: "linear-gradient(135deg, #38bdf8, #0284c7)"
   },
   project: {
     type: "project",
@@ -664,7 +795,7 @@ const presets = {
     tech: "Articulate Storyline 360, HTML5 / JS Web Objects, Cloudflare Workers",
     icon: "📚",
     era: "",
-    gradient: "linear-gradient(135deg, #0284c7, #1e3a8a)"
+    gradientSelect: "linear-gradient(135deg, #0284c7, #1e3a8a)"
   },
   legacy: {
     type: "legacy",
@@ -676,7 +807,7 @@ const presets = {
     tech: "Adobe Animate, ActionScript 3.0",
     icon: "🎞️",
     era: "Adobe Animate & ActionScript 3 (2016–2019)",
-    gradient: "linear-gradient(135deg, #6d28d9, #3b0764)"
+    gradientSelect: "linear-gradient(135deg, #6d28d9, #3b0764)"
   }
 };
 
@@ -688,9 +819,33 @@ function slugify(text) {
     .slice(0, 48);
 }
 
+function getSelectedGradient() {
+  const sel = $("gradientSelect").value;
+  if (sel === "custom") {
+    return $("gradientCustom").value.trim() || "linear-gradient(135deg, #38bdf8, #0284c7)";
+  }
+  return sel;
+}
+
 function updateGradientPreview() {
-  const val = $("gradient").value.trim() || "linear-gradient(135deg, #38bdf8, #0284c7)";
-  $("gradientSwatch").style.background = val;
+  const isCustom = $("gradientSelect").value === "custom";
+  $("gradientCustom").classList.toggle("hidden", !isCustom);
+  $("gradientSwatch").style.background = getSelectedGradient();
+}
+
+function checkDuplicateId() {
+  const currentId = $("id").value.trim();
+  const alertEl = $("duplicateAlert");
+  if (currentId && knownCatalogIds.has(currentId)) {
+    alertEl.textContent = `⚠ Duplicate ID detected: "${currentId}" already exists in your loaded catalog.js. Choose a unique slug.`;
+    alertEl.className = "alert-banner warn";
+    $("id").classList.add("invalid");
+    return true;
+  }
+  alertEl.textContent = "";
+  alertEl.className = "alert-banner";
+  $("id").classList.remove("invalid");
+  return false;
 }
 
 function normalizeYouTubeUrl(raw) {
@@ -724,6 +879,62 @@ function normalizeYouTubeUrl(raw) {
   return input;
 }
 
+// Child Modules Repeater
+function addChildCard(data = {}) {
+  const container = $("childrenContainer");
+  const card = document.createElement("div");
+  card.className = "child-card";
+
+  const top = document.createElement("div");
+  top.className = "child-card-top";
+  const badge = document.createElement("span");
+  badge.className = "child-badge";
+  badge.textContent = "Child Module / Grade Build";
+  const removeBtn = document.createElement("button");
+  removeBtn.type = "button";
+  removeBtn.className = "btn-remove";
+  removeBtn.textContent = "Remove";
+  removeBtn.addEventListener("click", () => card.remove());
+  top.append(badge, removeBtn);
+
+  const row1 = document.createElement("div");
+  row1.className = "row-2";
+  row1.innerHTML = `
+    <div class="field">
+      <label>Module Title *</label>
+      <input type="text" class="child-title" placeholder="e.g., Grade 04 or Number Pop">
+    </div>
+    <div class="field">
+      <label>Module Subtitle (optional)</label>
+      <input type="text" class="child-subtitle" placeholder="e.g., Reading books and Read &amp; Check">
+    </div>
+  `;
+
+  const row2 = document.createElement("div");
+  row2.className = "row-2";
+  row2.style.marginTop = "0.75rem";
+  row2.innerHTML = `
+    <div class="field">
+      <label>Module Summary</label>
+      <input type="text" class="child-summary" placeholder="Short description of this module…">
+    </div>
+    <div class="field">
+      <label>Direct Demo URL (optional)</label>
+      <input type="url" class="child-url" placeholder="https://… (leave blank if internal mode)">
+    </div>
+  `;
+
+  card.append(top, row1, row2);
+  container.appendChild(card);
+
+  if (data.title) card.querySelector(".child-title").value = data.title;
+  if (data.subtitle) card.querySelector(".child-subtitle").value = data.subtitle;
+  if (data.summary) card.querySelector(".child-summary").value = data.summary;
+  if (data.url) card.querySelector(".child-url").value = data.url;
+}
+
+$("addChildBtn").addEventListener("click", () => addChildCard());
+
 document.querySelectorAll(".preset").forEach(btn => {
   btn.addEventListener("click", () => {
     document.querySelectorAll(".preset").forEach(b => b.classList.remove("active"));
@@ -741,19 +952,27 @@ document.querySelectorAll(".preset").forEach(btn => {
 // Default preset
 document.querySelector('[data-type="application"]').click();
 
-$("gradient").addEventListener("input", updateGradientPreview);
+$("gradientSelect").addEventListener("change", updateGradientPreview);
+$("gradientCustom").addEventListener("input", updateGradientPreview);
 
-// Auto-slug from title until user edits ID
 $("title").addEventListener("input", () => {
+  $("title").classList.remove("invalid");
   if (!idManuallyEdited && $("title").value.trim()) {
     $("id").value = slugify($("title").value);
+    checkDuplicateId();
   }
 });
 
 $("id").addEventListener("input", () => {
   idManuallyEdited = true;
+  checkDuplicateId();
 });
 
+$("summary").addEventListener("input", () => {
+  $("summary").classList.remove("invalid");
+});
+
+// README.md Import
 $("readmeBtn").addEventListener("click", () => {
   const file = $("readmeFile").files[0];
   const status = $("readmeStatus");
@@ -768,9 +987,15 @@ $("readmeBtn").addEventListener("click", () => {
   const reader = new FileReader();
   reader.onload = (e) => {
     const text = e.target.result || "";
-    extractFromReadme(text);
-    status.textContent = "Extracted available fields from README ✓";
-    status.className = "status ok";
+    const extractedUrl = extractFromReadme(text);
+    if (extractedUrl) {
+      status.textContent = "Extracted fields ✓ — Please verify the extracted Demo URL is your playable link.";
+      status.className = "status warn";
+    } else {
+      status.textContent = "Extracted title & summary from README ✓";
+      status.className = "status ok";
+    }
+    checkDuplicateId();
   };
   reader.onerror = () => {
     status.textContent = "Could not read the file.";
@@ -799,15 +1024,96 @@ function extractFromReadme(md) {
   if (paragraph) $("summary").value = paragraph.slice(0, 400);
 
   const linkMatch = md.match(/https?:\/\/[^\s)]+/);
-  if (linkMatch) $("demoUrl").value = linkMatch[0];
+  if (linkMatch) {
+    $("demoUrl").value = linkMatch[0];
+    return linkMatch[0];
+  }
+  return "";
 }
+
+// Catalog.js Loader for Duplicate ID Check
+$("catalogBtn").addEventListener("click", () => {
+  const file = $("catalogFile").files[0];
+  const status = $("catalogStatus");
+  if (!file) {
+    status.textContent = "Please select your catalog.js file first.";
+    status.className = "status err";
+    return;
+  }
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    const text = e.target.result || "";
+    const matches = [...text.matchAll(/\bid\s*:\s*["'`]([^"'`]+)["'`]/g)];
+    knownCatalogIds.clear();
+    matches.forEach(m => knownCatalogIds.add(m[1].trim()));
+    $("catalogCountBadge").textContent = `${knownCatalogIds.size} IDs loaded`;
+    status.textContent = `Loaded ${knownCatalogIds.size} existing IDs for duplicate checking ✓`;
+    status.className = "status ok";
+    checkDuplicateId();
+  };
+  reader.onerror = () => {
+    status.textContent = "Could not read catalog.js.";
+    status.className = "status err";
+  };
+  reader.readAsText(file);
+});
 
 function escapeStr(s) {
   return String(s || "").replace(/\\/g, "\\\\").replace(/"/g, '\\"').replace(/\r?\n/g, "\\n");
 }
 
+function validateForm() {
+  const errors = [];
+  const title = $("title").value.trim();
+  const id = $("id").value.trim();
+  const summary = $("summary").value.trim();
+  const type = $("type").value;
+  const era = $("era").value.trim();
+
+  $("title").classList.toggle("invalid", !title);
+  $("id").classList.toggle("invalid", !id || knownCatalogIds.has(id));
+  $("summary").classList.toggle("invalid", !summary);
+
+  if (!title) errors.push("Title is required.");
+  if (!id) errors.push("ID slug is required.");
+  if (id && knownCatalogIds.has(id)) errors.push(`ID "${id}" already exists in catalog.js.`);
+  if (!summary) errors.push("Summary is required.");
+  if (type === "legacy" && !era) errors.push("Era is required for Legacy entries so they group properly.");
+
+  const valAlert = $("validationAlert");
+  if (errors.length > 0) {
+    valAlert.textContent = "Please fix before generating: " + errors.join(" ");
+    valAlert.className = "alert-banner err";
+    return false;
+  }
+  valAlert.textContent = "";
+  valAlert.className = "alert-banner";
+  return true;
+}
+
+function collectChildren() {
+  const cards = [...document.querySelectorAll("#childrenContainer .child-card")];
+  const items = [];
+  for (const card of cards) {
+    const cTitle = card.querySelector(".child-title").value.trim();
+    const cSub = card.querySelector(".child-subtitle").value.trim();
+    const cSum = card.querySelector(".child-summary").value.trim();
+    const cUrl = card.querySelector(".child-url").value.trim();
+    if (!cTitle && !cSum && !cUrl) continue;
+    items.push({
+      title: cTitle || "Untitled Module",
+      subtitle: cSub,
+      summary: cSum,
+      url: cUrl
+    });
+  }
+  return items;
+}
+
 function generate() {
-  const id = $("id").value.trim() || "new-entry";
+  if (!validateForm()) return;
+
+  const id = $("id").value.trim();
   const type = $("type").value;
   const title = $("title").value.trim();
   const subtitle = $("subtitle").value.trim();
@@ -824,9 +1130,10 @@ function generate() {
   const demoUrl = $("demoUrl").value.trim();
   const embedMode = $("embedMode").value;
   const demoNote = $("demoNote").value.trim();
-  const gradient = $("gradient").value.trim() || "linear-gradient(135deg, #38bdf8, #0284c7)";
+  const gradient = getSelectedGradient();
   const videoTitle = $("videoTitle").value.trim();
   const normalizedVideoUrl = normalizeYouTubeUrl($("videoUrl").value);
+  const children = collectChildren();
 
   if (normalizedVideoUrl && normalizedVideoUrl !== $("videoUrl").value.trim()) {
     $("videoUrl").value = normalizedVideoUrl;
@@ -838,6 +1145,18 @@ function generate() {
   if (embedMode === "inline") demoBlock += `,\n      aspectRatio: "16:9"`;
   if (demoNote) demoBlock += `,\n      note: "${escapeStr(demoNote)}"`;
   demoBlock += `\n    }`;
+
+  let childrenBlock = "";
+  if (children.length > 0) {
+    const childEntries = children.map(ch => {
+      const parts = [`        title: "${escapeStr(ch.title)}"`];
+      if (ch.subtitle) parts.push(`        subtitle: "${escapeStr(ch.subtitle)}"`);
+      parts.push(`        summary: "${escapeStr(ch.summary)}"`);
+      if (ch.url) parts.push(`        url: "${escapeStr(ch.url)}"`);
+      return `      {\n${parts.join(",\n")}\n      }`;
+    }).join(",\n");
+    childrenBlock = `    children: [\n${childEntries}\n    ],\n`;
+  }
 
   let videosBlock = "    videos: []";
   if (normalizedVideoUrl) {
@@ -864,25 +1183,52 @@ function generate() {
 ${techLines}
     ],
 ${demoBlock},
-    screenshots: [],
+${childrenBlock}    screenshots: [],
 ${videosBlock}
   },`;
 
   $("output").textContent = block;
+  $("copyStatus").textContent = "";
   $("resultCard").style.display = "block";
   $("resultCard").scrollIntoView({ behavior: "smooth", block: "nearest" });
 }
 
 $("generateBtn").addEventListener("click", generate);
 
+// Offline-safe Clipboard Copy with Selection Fallback
 $("copyBtn").addEventListener("click", () => {
   const text = $("output").textContent;
-  navigator.clipboard.writeText(text).then(() => {
-    const btn = $("copyBtn");
-    const orig = btn.textContent;
-    btn.textContent = "Copied ✓";
-    setTimeout(() => btn.textContent = orig, 1500);
-  });
+  const statusEl = $("copyStatus");
+  const btn = $("copyBtn");
+
+  function fallbackSelect() {
+    const range = document.createRange();
+    range.selectNodeContents($("output"));
+    const sel = window.getSelection();
+    sel.removeAllRanges();
+    sel.addRange(range);
+    try {
+      const ok = document.execCommand("copy");
+      if (ok) {
+        statusEl.textContent = "Copied to clipboard ✓";
+        statusEl.className = "status ok";
+        return;
+      }
+    } catch (e) {}
+    statusEl.textContent = "Text selected below — press Ctrl+C (or Cmd+C) to copy.";
+    statusEl.className = "status warn";
+  }
+
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(text).then(() => {
+      const orig = btn.textContent;
+      btn.textContent = "Copied ✓";
+      statusEl.textContent = "";
+      setTimeout(() => btn.textContent = orig, 1500);
+    }).catch(() => fallbackSelect());
+  } else {
+    fallbackSelect();
+  }
 });
 
 $("downloadBtn").addEventListener("click", () => {
@@ -897,14 +1243,17 @@ $("downloadBtn").addEventListener("click", () => {
 
 $("resetBtn").addEventListener("click", () => {
   document.querySelectorAll("input, textarea").forEach(el => {
-    if (!["year", "tech", "gradient", "icon"].includes(el.id)) el.value = "";
+    if (!["year", "tech", "icon"].includes(el.id)) el.value = "";
+    el.classList.remove("invalid");
   });
   $("readmeFile").value = "";
   $("year").value = "2026";
   $("tech").value = "HTML5, CSS3, Vanilla JavaScript, Cloudflare Workers";
-  $("gradient").value = "linear-gradient(135deg, #38bdf8, #0284c7)";
   $("icon").value = "🎮";
   $("readmeStatus").textContent = "";
+  $("validationAlert").className = "alert-banner";
+  $("duplicateAlert").className = "alert-banner";
+  $("childrenContainer").innerHTML = "";
   $("resultCard").style.display = "none";
   idManuallyEdited = false;
   document.querySelector('[data-type="application"]').click();
